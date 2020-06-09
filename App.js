@@ -1,19 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ApolloProvider } from '@apollo/react-hooks';
+
+import Routes from './src/routes';
+
+import ApolloClient from 'apollo-boost';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+const cache = new InMemoryCache();
+const httpLink = createHttpLink({
+  uri: 'https://www.graphqlhub.com/playground',
+});
+
+const client = new ApolloClient({
+  uri: httpLink,
+  cache
+})
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <ApolloProvider client={client}>
+      <Routes />
+    </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
