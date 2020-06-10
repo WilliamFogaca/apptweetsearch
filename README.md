@@ -26,8 +26,9 @@ Entre na pasta do repositório e instale as dependências
 * $ cd apptweetsearch && yarn install
 
 ### Scripts:
-Comando para executar o à aplicação
-* $ yarn start
+Comandos da aplicação
+* $ yarn start 
+* $ yarn eject
 
 ## Ferramentas utilizadas no desenvolvimento
 * Expo
