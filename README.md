@@ -30,6 +30,15 @@ Comandos da aplicação
 * $ yarn start 
 * $ yarn eject
 
+Para realizar as contas abaixo você precisará ter uma conta na Expo
+Android APK
+* $ expo build:android -t apk
+Ios IPA
+* $ expo build:ios -t archive
+
+Os arquivos gerados acima podem ser obtidos no dashboard do Expo
+Mais informações em https://docs.expo.io/distribution/building-standalone-apps/#3-start-the-build
+
 ## Ferramentas utilizadas no desenvolvimento
 * Expo
 * React Native
