@@ -22,7 +22,12 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.zax.tweetsearch",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.zax.tweetsearch",
+      "versionCode": 1
     }
   }
 }
