@@ -3,17 +3,19 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#14171A',
+    backgroundColor: '#fff',
   },
 
   header: {
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+  },
+
+  headerUserBack: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#E1E8ED',
-    paddingVertical: 25,
-    paddingHorizontal: 10,
-    marginBottom: 20,
   },
 
   headerUserInfos: {
@@ -22,6 +24,8 @@ export default StyleSheet.create({
   },
 
   UserImg: {
+    width: 48,
+    height: 48,
     borderRadius: 48/2,
     marginRight: 10,
   },
@@ -31,19 +35,43 @@ export default StyleSheet.create({
     fontWeight: '700',
   },
 
+  followersTweets: {
+    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+
+ 
+  followersTweetsCounter: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#161F3D',
+    fontFamily: 'Roboto',
+  },
+  followersTweetsText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#161F3D',
+    opacity: 0.3,
+  },
+
   feedList: {
-    paddingHorizontal: 10,
+    padding: 15,
+    backgroundColor: '#E1E8ED',
   },
 
   feedItem: {
-    backgroundColor: '#AAB8C2',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 13,
-    marginBottom: 12,
+    marginVertical: 6,
     flexDirection: 'row',
   },
 
   feedItemImg: {
+    width: 48,
+    height: 48,
     borderRadius: 48/2,
     marginRight: 10,
   },

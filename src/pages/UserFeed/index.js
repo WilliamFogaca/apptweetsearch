@@ -1,45 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Feather } from '@expo/vector-icons';
-import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, Image, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useQuery } from '@apollo/react-hooks';
 
 /* Styles */
 import styles from './styles';
 
-/* PNGs */
-import profileImg from '../../assets/profile.jpg';
-import backImg from '../../assets/back.png';
+/* Components */
+import Loading from '../components/Loading';
+
+/* helpers */
+import { formatDate } from '../../helpers';
+
+/* Queries */
+import { UserFeedQuery } from '../../GraphQL/queries/UserFeedQuery';
 
 export default function UserFeed() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const [countFeedItems, setCountFeedItems] = useState(10);
+
+  const userInfos = route.params.userInfos;
+
+  const {loading, data} = useQuery(UserFeedQuery, {
+    variables: { userScreenName: userInfos.screen_name, count: countFeedItems }
+  });
+
+  if(!loading) console.log(userInfos.profile_image_url);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerUserInfos}>
-          <Image source={profileImg} style={styles.UserImg} />
-          <Text style={styles.UserName}>Martin Palmer</Text>
+        <View style={styles.headerUserBack}>
+          <View style={styles.headerUserInfos}>
+            <Image
+              style={styles.UserImg}
+              source={{uri: userInfos.profile_image_url}}
+            />
+            <Text style={styles.UserName}>{userInfos.name}</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Feather name="arrow-left" size={28} color="#14171A" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Feather name="arrow-left" size={28} color="#14171A" />
-        </TouchableOpacity>
+        <View style={styles.followersTweets}>
+            <View style={styles.followers}>
+              <Text style={styles.followersTweetsCounter}>{userInfos.followers_count}</Text>
+              <Text style={styles.followersTweetsText}>Seguidores</Text>
+              
+            </View>
+            <View style={styles.tweets}>
+              <Text style={styles.followersTweetsCounter}>{userInfos.tweets_count}</Text>
+              <Text style={styles.followersTweetsText}>Tweets</Text>
+            </View>
+          </View>
       </View>
 
+      { !loading ? 
       <FlatList
         style={styles.feedList}
-        data={[1, 2, 3]}
-        keyExtractor={feedItem => String(feedItem) }
-        renderItem={() => (
+        contentContainerStyle={{paddingBottom: 21}}
+        data={data.twitter.user.tweets}
+        keyExtractor={(tweet) => String(tweet.id) }
+        renderItem={ ({ item: tweet }) => (
           <View style={styles.feedItem} >
-            <Image source={profileImg} style={styles.feedItemImg} />
+            <Image
+              style={styles.feedItemImg} 
+              source={{
+                uri: userInfos.profile_image_url
+              }}
+            />
             <View style={styles.feedItemContent}>
-              <Text style={styles.feedItemName}>Martin Palmer</Text>
-              <Text style={styles.feedItemDate}>08/06/2020, 15:24</Text>
-              <Text style={styles.feedItemText}>What is the loop of Creation? How is there something from nothing? In spite of the fact that it is impossible to prove that anythin….</Text>
+              <Text style={styles.feedItemName}>{userInfos.name}</Text>
+              <Text style={styles.feedItemDate}>
+                { formatDate(tweet.created_at) }
+              </Text>
+              <Text style={styles.feedItemText}>{tweet.text}</Text>
             </View>
           </View>
         )}
       />
-    </View>
+      : <Loading /> }
+    </SafeAreaView>
   );
 }

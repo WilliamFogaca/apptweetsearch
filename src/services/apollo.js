@@ -1,13 +1,12 @@
   
 import ApolloClient from 'apollo-boost';
-import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const httpLink = createHttpLink({
-  uri: 'https://www.graphqlhub.com/playground',
-});
+const cache = new InMemoryCache();
 
 const client = new ApolloClient({
-  uri: httpLink
+  uri: 'https://apptweetsearch.herokuapp.com/graphql',
+  cache
 });
 
 export default client;

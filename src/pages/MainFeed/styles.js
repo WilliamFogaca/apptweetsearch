@@ -1,41 +1,55 @@
 import { StyleSheet } from 'react-native';
 
+const paddingHorizontal = 15;
+
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    backgroundColor: '#14171A',
+    backgroundColor: '#fff',
   },
 
-  headerSearch: {
-    marginBottom: 20,
+  header: {
+    paddingHorizontal: paddingHorizontal,
+    backgroundColor: '#F5F8FA',
   },
-
+  
   headerText: {
     fontSize: 22,
-    color: '#fff',
+    color: '#14171A',
     textAlign: 'center',
-    marginBottom: 15,
+    paddingVertical: 15,
+    fontWeight: 'bold',
   },
 
   headerSearchContainer: {
     borderRadius: 15,
+    marginBottom: 10,
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    backgroundColor: '#657786',
   },
 
   headerSearchInput: {
     borderRadius: 15,
+    backgroundColor: '#434c56',
+  },
+
+  feedList: {
+    backgroundColor: '#E1E8ED',
+    padding: 15,
   },
 
   feedItem: {
-    backgroundColor: '#AAB8C2',
+    backgroundColor: '#fff',
     borderRadius: 5,
     padding: 13,
-    marginBottom: 12,
+    marginVertical: 6,
     flexDirection: 'row',
   },
 
   feedItemImg: {
+    width: 48,
+    height: 48,    
     borderRadius: 48/2,
     marginRight: 10,
   },
@@ -67,6 +81,42 @@ export default StyleSheet.create({
     color: '#161F3D',
   },
 
+  noTweetFound: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  noTweetFoundText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#14171A',
+  },
+
+  noTweetFoundSearchText: {
+    textAlign: 'center',
+    fontSize: 22,
+    color: '#14171A',
+  },
+
+  noSearchInputed: {
+    paddingTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: paddingHorizontal,
+  },
+
+  noSearchText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#14171A',
+    marginBottom: 15,
+  },
+
+  noSearchButton: {
+    width: '60%',
+    marginBottom: 10,
+  },
 
 
 });
