@@ -6,13 +6,9 @@ import { useQuery } from '@apollo/react-hooks';
 
 /* Styles */
 import styles from './styles';
-
 /* Components */
 import Loading from '../components/Loading';
-
-/* helpers */
-import { formatDate } from '../../helpers';
-
+import FeedItem from '../components/FeedItem';
 /* Queries */
 import { UserFeedQuery } from '../../GraphQL/queries/UserFeedQuery';
 
@@ -27,8 +23,6 @@ export default function UserFeed() {
   const {loading, data} = useQuery(UserFeedQuery, {
     variables: { userScreenName: userInfos.screen_name, count: countFeedItems }
   });
-
-  if(!loading) console.log(userInfos.profile_image_url);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,21 +59,7 @@ export default function UserFeed() {
         data={data.twitter.user.tweets}
         keyExtractor={(tweet) => String(tweet.id) }
         renderItem={ ({ item: tweet }) => (
-          <View style={styles.feedItem} >
-            <Image
-              style={styles.feedItemImg} 
-              source={{
-                uri: userInfos.profile_image_url
-              }}
-            />
-            <View style={styles.feedItemContent}>
-              <Text style={styles.feedItemName}>{userInfos.name}</Text>
-              <Text style={styles.feedItemDate}>
-                { formatDate(tweet.created_at) }
-              </Text>
-              <Text style={styles.feedItemText}>{tweet.text}</Text>
-            </View>
-          </View>
+          <FeedItem tweetInfos={tweet} />
         )}
       />
       : <Loading /> }

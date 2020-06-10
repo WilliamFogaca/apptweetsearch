@@ -1,28 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StatusBar, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text,
+  StatusBar, 
+  FlatList, 
+  TouchableOpacity, 
+  SafeAreaView,
+  ActivityIndicator 
+} from 'react-native';
 import { SearchBar, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@apollo/react-hooks';
 
 /* Styles */
 import styles from './styles';
-
 /* Components */
 import Loading from '../components/Loading';
-
-/* helpers */
-import { formatDate } from '../../helpers';
-
+import FeedItem from '../components/FeedItem';
 /* Queries */
 import { MainSearchQuery } from '../../GraphQL/queries/MainSearchQuery';
 
 export default function MainFeed() {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
+  const [count] = useState(10);
   const [limit, setLimit] = useState(10);
 
-  const { loading, data, fetchMore } = useQuery(MainSearchQuery, {
-    variables: { qText: searchText !== '' ? searchText : 'Javascript', count: limit }
+  const { loading, data, refetch, fetchMore, networkStatus } = useQuery(MainSearchQuery, {
+    variables: { qText: searchText !== '' ? searchText : 'Javascript', count: count }
   });
 
   //if (error) console.log('ERROR: ', error);
@@ -48,41 +53,48 @@ export default function MainFeed() {
         style={styles.feedList}
         contentContainerStyle={{paddingBottom: 21}}
         data={data.twitter.search}
-        onEndReached={() => fetchMore({
-            variables: {
-              count: limit + 10
-            },
-            updateQuery: (previousResult, { fetchMoreResult }) => {
-              console.log(previousResult);
-              console.log(fetchMoreResult);
-              if (!fetchMoreResult || fetchMoreResult.twitter.search.length === 0) {
-                return previousResult;
-              }
-              return {
-                data: fetchMoreResult
-              };
-            }
+        refreshing={networkStatus === 4}
+        onRefresh={() => refetch({
+          variables: {
+            count: count
+          }
         })}
-        onEndReachedThreshold={0.4}
-        keyExtractor={(tweet) => String(tweet.id) }
+        onEndReached={() => {
+          const newLimit = limit + count;
+          fetchMore({
+            variables: {
+              count: newLimit
+            },
+            updateQuery: (prev, { fetchMoreResult }) => {
+              if (!fetchMoreResult || fetchMoreResult.twitter.search.length === 0) {
+                return prev;
+              } else {
+                var prevResultConcat = [...prev.twitter.search, ...fetchMoreResult.twitter.search];
+                fetchMoreResult = prevResultConcat.reduce((unique, item) => {
+                  return unique.some( itemSome => itemSome.id === item.id ) ? unique : [...unique, item];
+                }, []);
+              }
+              return Object.assign({}, prev, {
+                twitter: {
+                  __typename: prev.twitter.__typename,
+                  search: fetchMoreResult
+                }
+              });
+            }
+          });
+          setLimit(newLimit);
+        }}
+        ListFooterComponent={
+          !loading ? <ActivityIndicator style={styles.flatListBottomLoading} size={40} color="#1DA1F2" /> : ''
+        }
+        onEndReachedThreshold={1}
+        keyExtractor={(tweet) => tweet.id }
         renderItem={ ({ item: tweet }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate('UserFeed', { userInfos: tweet.user })}
             activeOpacity={0.8}
           >
-            <View style={styles.feedItem} >
-              <Image
-                style={styles.feedItemImg} 
-                source={{uri: tweet.user.profile_image_url}}
-              />
-              <View style={styles.feedItemContent}>
-                <Text style={styles.feedItemName}>{tweet.user.name}</Text>
-                <Text style={styles.feedItemDate}>
-                  { formatDate(tweet.created_at) }
-                </Text>
-                <Text style={styles.feedItemText}>{tweet.text}</Text>
-              </View>
-            </View>
+            <FeedItem tweetInfos={tweet} />
           </TouchableOpacity>
         )}
       />
