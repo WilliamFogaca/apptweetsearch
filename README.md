@@ -1,4 +1,4 @@
-# Projeto DevFood
+# Projeto Tweet Search
 Projeto Tweet Search desenvolvido com React Native e GraphQL
 
 ## Descrição
