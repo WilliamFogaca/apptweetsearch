@@ -23,14 +23,17 @@ import { MainSearchQuery } from '../../GraphQL/queries/MainSearchQuery';
 export default function MainFeed() {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [count] = useState(10);
   const [limit, setLimit] = useState(10);
+  const [count] = useState(10);
 
   const { loading, data, refetch, fetchMore, networkStatus } = useQuery(MainSearchQuery, {
-    variables: { qText: searchText !== '' ? searchText : 'Javascript', count: count }
+    variables: { qText: (searchText !== '') ? searchText : 'Javascript', count: count }
   });
 
-  //if (error) console.log('ERROR: ', error);
+  function changeSearchTextLimit(text) {
+    setSearchText(text);
+    setLimit(count);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,7 +43,8 @@ export default function MainFeed() {
         <SearchBar
           containerStyle={styles.headerSearchContainer}
           inputContainerStyle={styles.headerSearchInput}
-          onChangeText={text => setSearchText(text)}
+          onChangeText={text => changeSearchTextLimit(text)}
+
           placeholder="Pesquise aqui"
           value={searchText}
         />
@@ -56,9 +60,10 @@ export default function MainFeed() {
         refreshing={networkStatus === 4}
         onRefresh={() => refetch({
           variables: {
-            count: count
+            count: 10
           }
         })}
+        onEndReachedThreshold={0.1}
         onEndReached={() => {
           const newLimit = limit + count;
           fetchMore({
@@ -69,6 +74,7 @@ export default function MainFeed() {
               if (!fetchMoreResult || fetchMoreResult.twitter.search.length === 0) {
                 return prev;
               } else {
+                setLimit(newLimit);
                 var prevResultConcat = [...prev.twitter.search, ...fetchMoreResult.twitter.search];
                 fetchMoreResult = prevResultConcat.reduce((unique, item) => {
                   return unique.some( itemSome => itemSome.id === item.id ) ? unique : [...unique, item];
@@ -82,12 +88,10 @@ export default function MainFeed() {
               });
             }
           });
-          setLimit(newLimit);
         }}
         ListFooterComponent={
           !loading ? <ActivityIndicator style={styles.flatListBottomLoading} size={40} color="#1DA1F2" /> : ''
         }
-        onEndReachedThreshold={1}
         keyExtractor={(tweet) => tweet.id }
         renderItem={ ({ item: tweet }) => (
           <TouchableOpacity
@@ -110,19 +114,19 @@ export default function MainFeed() {
         containerStyle={styles.noSearchButton} 
         buttonStyle={{backgroundColor: '#F0DB4F'}}
         title="Javascript" 
-        onPress={() => setSearchText('Javascript')}
+        onPress={() => changeSearchTextLimit('Javascript')}
         />
         <Button 
         containerStyle={styles.noSearchButton} 
         buttonStyle={{backgroundColor: '#0ad5fc'}}
         title="React Native" 
-        onPress={() => setSearchText('React Native')}
+        onPress={() => changeSearchTextLimit('React Native')}
         />
         <Button 
         containerStyle={styles.noSearchButton} 
         buttonStyle={{backgroundColor: '#e535ab'}}
         title="GraphQL" 
-        onPress={() => setSearchText('GraphQL')}
+        onPress={() =>  changeSearchTextLimit('GraphQL')}
         />
       </View>
       }
