@@ -26,7 +26,7 @@ export default StyleSheet.create({
   UserImg: {
     width: 48,
     height: 48,
-    borderRadius: 48/2,
+    borderRadius: 48 / 2,
     marginRight: 10,
   },
 
@@ -42,7 +42,6 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
- 
   followersTweetsCounter: {
     textAlign: 'center',
     fontSize: 16,
@@ -60,5 +59,4 @@ export default StyleSheet.create({
     padding: 15,
     backgroundColor: '#E1E8ED',
   },
-
 });

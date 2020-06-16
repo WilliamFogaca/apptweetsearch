@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23" height="5" viewBox="0 0 23 5">
+  <g id="Menu_dots" data-name="Menu dots" transform="translate(0 5) rotate(-90)" opacity="0.6">
+    <circle id="Oval" cx="2.5" cy="2.5" r="2.5" fill="#161f3d"/>
+    <circle id="Oval_Copy" data-name="Oval Copy" cx="2.5" cy="2.5" r="2.5" transform="translate(0 9)" fill="#161f3d"/>
+    <circle id="Oval_Copy_2" data-name="Oval Copy 2" cx="2.5" cy="2.5" r="2.5" transform="translate(0 18)" fill="#161f3d"/>
+  </g>
+</svg>

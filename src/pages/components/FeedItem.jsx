@@ -1,30 +1,41 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
 import React from 'react';
-import { 
-  View, 
-  Text, 
+import {
+  View,
+  Text,
   Image,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 
 /* Pngs */
-import tweetOptions from '../../assets/tweet-options.png';
-import tweetFavorite from '../../assets/tweet-favorite.png';
-import tweetComment from '../../assets/tweet-comment.png';
+import TweetOptions from '../../assets/tweet-options.svg';
+import TweetFavorite from '../../assets/tweet-favorite.svg';
+import TweetComment from '../../assets/tweet-comment.svg';
 
-/* helpers */
-import { formatDate } from '../../helpers';
-
-export default function FeedItem(props) {
-  const { 
+const FeedItem = ({
+  tweetInfos: {
     user: {
-      profile_image_url: profile_image_url, 
-      name: name
-    }, 
-    created_at, 
-    text 
-  } = props.tweetInfos;
+      profile_image_url,
+      name,
+    },
+    created_at,
+    text,
+  },
+}) => {
+  const formatDate = (date) => {
+    const data = new Date(date);
+    const dia = data.getDate().toString().padStart(2, '0');
+    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+    const ano = data.getFullYear();
+    const hora = data.getHours().toString().padStart(2, '0');
+    const minuto = data.getMinutes().toString().padStart(2, '0');
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+  };
+
   return (
-    <View style={styles.feedItem} >
+    <View style={styles.feedItem}>
       <Image
         style={styles.feedItemImg}
         source={{ uri: profile_image_url }}
@@ -38,20 +49,22 @@ export default function FeedItem(props) {
             </Text>
           </View>
           <View style={styles.feedItemContentHeaderFeedOptions}>
-            <Image source={tweetOptions} />
+            <TweetOptions />
           </View>
         </View>
         <View style={styles.feedItemContentbody}>
           <Text style={styles.feedItemText}>{text}</Text>
         </View>
         <View style={styles.feedItemContentFooter}>
-          <Image style={styles.feedItemContentFooterImg} source={tweetFavorite} />
-          <Image style={styles.feedItemContentFooterImg} source={tweetComment} />
+          <TweetFavorite style={styles.feedItemContentFooterImg} />
+          <TweetComment style={styles.feedItemContentFooterImg} />
         </View>
       </View>
     </View>
   );
-}
+};
+
+export default FeedItem;
 
 const styles = StyleSheet.create({
   feedItem: {
@@ -64,8 +77,8 @@ const styles = StyleSheet.create({
 
   feedItemImg: {
     width: 48,
-    height: 48,    
-    borderRadius: 48/2,
+    height: 48,
+    borderRadius: 48 / 2,
     marginRight: 10,
   },
 

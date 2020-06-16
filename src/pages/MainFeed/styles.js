@@ -9,10 +9,10 @@ export default StyleSheet.create({
   },
 
   header: {
-    paddingHorizontal: paddingHorizontal,
+    paddingHorizontal,
     backgroundColor: '#F5F8FA',
   },
-  
+
   headerText: {
     fontSize: 22,
     color: '#14171A',
@@ -61,7 +61,7 @@ export default StyleSheet.create({
     paddingTop: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: paddingHorizontal,
+    paddingHorizontal,
   },
 
   noSearchText: {
@@ -75,6 +75,4 @@ export default StyleSheet.create({
     width: '60%',
     marginBottom: 10,
   },
-
-
 });
